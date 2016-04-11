@@ -18,7 +18,7 @@ The goal of this package is:
 Installation
 ------------
 
-For now just clone this repo and enter
+For now just clone this repo (checkout master, development is for, well, development) and enter
 
 ```
 $ composer install
@@ -147,6 +147,7 @@ Todos
  * get rid of stupid [Sparkpost Extension](https://github.com/iPark-Media/sparkpost-api-cli/blob/development/src/Sparkpost/Sparkpost.php) when [Sparkpost Client provides ability to add subaccounts to requests](https://github.com/SparkPost/php-sparkpost/issues/73)
  * improve documentation
  * add more endpoints
+ * create phar
 
 Authors
 -------
@@ -160,6 +161,7 @@ Contributions to are very welcome!
 
 * Report any bugs or issues you find on the [issue tracker].
 * You can grab the source code at the package’s [Git repository].
+* Please file pull requests against development branch
 
 License
 -------
