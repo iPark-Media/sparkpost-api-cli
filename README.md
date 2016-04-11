@@ -161,6 +161,11 @@ Contributions to are very welcome!
 * Report any bugs or issues you find on the [issue tracker].
 * You can grab the source code at the package’s [Git repository].
 
+
+Acknowledgement
+----------
+Uses the beautiful https://github.com/webmozart/console by @webmozart.
+
 License
 -------
 
