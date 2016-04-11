@@ -27,15 +27,23 @@ final class SubaccountHandler extends AbstractSparkpostUnwrappedHandler
         try {
             $api = $this->connect($args);
 
-            $response = $api->get();
+            $subaccount = $args->getArgument('subaccountId');
+            $use_subaccount = $subaccount !== null;
+
+            $response = $api->get($subaccount);
+            if ($use_subaccount) {
+                // wrap results, when only one subaccount was requested to be able to use array_map
+                $response = ['results' => $response];
+            }
 
             $table = new Table();
-            $table->setHeaderRow(['Name', 'Id', 'Status']);
+            $table->setHeaderRow(['Name', 'Id', 'Status', 'Compliance Status']);
             $results = array_map(function ($subaccount) {
                 return [
                     $subaccount['name'],
                     $subaccount['id'],
                     $subaccount['status'],
+                    $subaccount['compliance_status'],
                 ];
             }, $response['results']);
 

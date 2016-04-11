@@ -63,6 +63,7 @@ class SparkpostApplicationConfig extends DefaultApplicationConfig
                 ->addOption('config', null, Option::REQUIRED_VALUE, 'where to read the config from')
                 ->beginSubCommand('list')
                     ->setHandlerMethod('handleList')
+                    ->addArgument('subaccountId', Argument::OPTIONAL, 'the subaccount id the info is requested for')
                     ->markDefault()
                 ->end()
                 ->beginSubCommand('add')
