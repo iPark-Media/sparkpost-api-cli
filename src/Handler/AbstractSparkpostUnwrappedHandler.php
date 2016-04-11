@@ -11,9 +11,9 @@
 namespace Ipm\SparkpostApi\Handler;
 
 use GuzzleHttp\Client;
+use Ipm\SparkpostApi\Sparkpost\Sparkpost;
 use Ivory\HttpAdapter\Guzzle6HttpAdapter;
 use SparkPost\APIResponseException;
-use SparkPost\SparkPost;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Question\Question;
 use Webmozart\Console\Adapter\ArgsInput;
@@ -31,41 +31,29 @@ class AbstractSparkpostUnwrappedHandler
      */
     protected $config = [];
 
-    public function __construct()
-    {
-        $this->config = include 'config.php';
-    }
-
     /**
      * @param Args $args
      * @return \SparkPost\APIResource
      */
     protected function connect(Args $args)
     {
-        $subaccount = false;
-        if ($args->isArgumentDefined('subaccount')) {
-            $subaccount = $args->getArgument('subaccount');
-        }
-
         $config = $args->getOption('config') ?? 'config.php';
 
-        if(!file_exists($config)) {
+        if (!file_exists($config)) {
             throw new \InvalidArgumentException("The config file {$config} is not readable.");
         }
 
         $this->config = include $config;
 
-        $parameters = [
-            'key' => $args->getOption('key') ?? $this->config['key'],
-        ];
+        $httpAdapter = new Guzzle6HttpAdapter(new Client());
 
-        if ($subaccount) {
-            $parameters['X-MSYS-SUBACCOUNT'] = $subaccount;
+        $parameters = [ 'key' => $args->getOption('key') ?? $this->config['key'] ];
+        $sparkpost = new Sparkpost($httpAdapter, $parameters);
+        if ($args->isArgumentDefined('subaccount')) {
+            $sparkpost->addSubaccount($args->getArgument('subaccount'));
         }
 
-        $httpAdapter = new Guzzle6HttpAdapter(new Client());
-        $sparky = new SparkPost($httpAdapter, $parameters);
-        return $sparky->setupUnwrapped(static::API_ENDPOINT);
+        return $sparkpost->setupUnwrapped(static::API_ENDPOINT);
     }
 
     protected function renderApiResponseException(APIResponseException $exception, IO $io)
