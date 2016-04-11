@@ -33,6 +33,7 @@ class SparkpostApplicationConfig extends DefaultApplicationConfig
                     return new SendingDomainHandler();
                 })
                 ->addOption('key', null, Option::REQUIRED_VALUE, 'the Api-Key for the request')
+                ->addOption('config', null, Option::REQUIRED_VALUE, 'where to read the config from')
                 ->beginSubCommand('list')
                     ->setHandlerMethod('handleList')
                     ->markDefault()
@@ -59,6 +60,7 @@ class SparkpostApplicationConfig extends DefaultApplicationConfig
                     return new SubaccountHandler();
                 })
                 ->addOption('key', null, Option::REQUIRED_VALUE, 'the Api-Key for the request')
+                ->addOption('config', null, Option::REQUIRED_VALUE, 'where to read the config from')
                 ->beginSubCommand('list')
                     ->setHandlerMethod('handleList')
                     ->markDefault()

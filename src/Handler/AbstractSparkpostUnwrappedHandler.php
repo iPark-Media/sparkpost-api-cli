@@ -47,6 +47,14 @@ class AbstractSparkpostUnwrappedHandler
             $subaccount = $args->getArgument('subaccount');
         }
 
+        $config = $args->getOption('config') ?? 'config.php';
+
+        if(!file_exists($config)) {
+            throw new \InvalidArgumentException("The config file {$config} is not readable.");
+        }
+
+        $this->config = include $config;
+
         $parameters = [
             'key' => $args->getOption('key') ?? $this->config['key'],
         ];
