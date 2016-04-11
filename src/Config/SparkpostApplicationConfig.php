@@ -23,9 +23,8 @@ class SparkpostApplicationConfig extends DefaultApplicationConfig
         parent::configure();
 
         $this
-            ->setName('sparkpost')
+            ->setName('sparkpost-api-cli')
             ->setVersion('0.0.1')
-            // ...
 
             ->beginCommand('sending-domains')
                 ->setDescription('Handle sending domains')

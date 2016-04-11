@@ -1,0 +1,17 @@
+<?php
+
+return [
+    'key' => '', // enter your api key here or provide it via cli option --key
+    'sending-domains' =>
+        [
+            'generate_dkim' => true, // change to false if you want to provide a custom dkim key
+//            'dkim' => [ // remove comments if you want to provide a custom dkim key
+//                'selector' => 'selector', // enter your selector here
+//                'private' => '', // put your private dkim key here
+//                'public' => '', // put your public dkim key here
+//            ]
+        ],
+    'subaccounts' => [
+        'key_grants' => ['smtp/inject', 'sending_domains/manage', 'message_events/view', 'suppression_lists/manage']
+    ],
+];
