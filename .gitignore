@@ -40,3 +40,6 @@
 
 # Intellij
 .idea/
+
+# Api-Keys / Private Keys etc.
+/config.php
