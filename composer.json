@@ -1,0 +1,30 @@
+{
+    "name": "ipm/sparkpost-api-cli",
+    "description": "Simple command-line application to talk to ",
+    "type": "application",
+    "keywords": [
+        "template"
+    ],
+    "homepage": "https://github.com/iPark-Media/sparkpost-api-cli",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Roman Sachse",
+            "email": "r.sachse@ipark-media.de"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ipm\\SparkpostApi\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "~6.2",
+        "webmozart/console": "~1.0@beta",
+        "sparkpost/php-sparkpost": "~1.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "~3.0"
+    }
+}
