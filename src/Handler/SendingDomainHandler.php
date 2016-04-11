@@ -60,15 +60,10 @@ final class SendingDomainHandler extends AbstractSparkpostUnwrappedHandler
     {
         $domain = $args->getArgument('domain');
 
-        $parameters = ['domain' => $domain];
-        if (array_key_exists('dkim', $this->config['sending-domains'])) {
-            $parameters['dkim'] = $this->config['sending-domains']['dkim'];
-            $parameters['generate_dkim'] = false;
-        }
-
         try {
             $io->writeLine("Creating: <b>{$domain}</b>");
             $api = $this->connect($args);
+            $parameters = array_merge(['domain' => $domain], $this->config['sending-domains'] ?? []);
             $api->create($parameters);
             $io->writeLine("<b>{$domain}</b> was succesfully created");
         } catch (APIResponseException $e) {
@@ -103,6 +98,7 @@ final class SendingDomainHandler extends AbstractSparkpostUnwrappedHandler
             $io->writeLine("<b>{$domain}</b> was deleted");
         } catch (APIResponseException $e) {
             $this->renderApiResponseException($e, $io);
+            $io->writeLine("<warn>Did you provide the subaccount the domain is tied too?</warn>");
         }
     }
 
@@ -113,16 +109,11 @@ final class SendingDomainHandler extends AbstractSparkpostUnwrappedHandler
      */
     public function handleUpdate(Args $args, IO $io)
     {
-        $parameters = [];
-        if (array_key_exists('dkim', $this->config['sending-domains'])) {
-            $parameters['dkim'] = $this->config['sending-domains']['dkim'];
-        }
-
         try {
             $domain = $args->getArgument('domain');
             $io->writeLine("Updating: <b>{$domain}</b>");
             $api = $this->connect($args);
-            $api->update($domain, $parameters);
+            $api->update($domain, $this->config['sending-domains'] ?? []);
             $io->writeLine("<b>{$domain}</b> was succesfully updated");
         } catch (APIResponseException $e) {
             $this->renderApiResponseException($e, $io);

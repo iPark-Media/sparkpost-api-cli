@@ -61,15 +61,15 @@ final class SubaccountHandler extends AbstractSparkpostUnwrappedHandler
 
         $parameters = [
             'name' => $name,
-            'key_grants' => $this->config['subaccounts']['key_grants'],
             'key_label' => "{$name} Api-Key",
         ];
 
         try {
             $io->writeLine("Creating: <b>{$name}</b>");
             $api = $this->connect($args);
+            $parameters = array_merge($parameters, $this->config['subaccounts'] ?? []);
             $response = $api->create($parameters);
-            $io->writeLine("The subbaccount with the name <b>{$name}</b> was succesfully created");
+            $io->writeLine("The subbaccount with the name <b>{$name}</b> was succesfully created with id <b>{$response['results']['subaccount_id']}</b>");
             $io->writeLine("<warn>The API-key is: {$response['results']['key']} . Copy it, because you will never see it again</warn>");
             return 0;
         } catch (APIResponseException $e) {
@@ -85,13 +85,11 @@ final class SubaccountHandler extends AbstractSparkpostUnwrappedHandler
      */
     public function handleActivate(Args $args, IO $io)
     {
-        $parameters = ['status' => 'active'];
-
         try {
             $subaccount = $args->getArgument('subaccount');
             $io->writeLine("Activate subaccount: <b>{$subaccount}</b>");
             $api = $this->connect($args);
-            $api->update($subaccount, $parameters);
+            $api->update($subaccount, ['status' => 'active']);
             $io->writeLine("<b>{$subaccount}</b> was succesfully activated");
         } catch (APIResponseException $e) {
             $this->renderApiResponseException($e, $io);
@@ -105,13 +103,11 @@ final class SubaccountHandler extends AbstractSparkpostUnwrappedHandler
      */
     public function handleSuspend(Args $args, IO $io)
     {
-        $parameters = ['status' => 'suspended'];
-
         try {
             $subaccount = $args->getArgument('subaccount');
             $io->writeLine("Suspending subaccount: <b>{$subaccount}</b>");
             $api = $this->connect($args);
-            $api->update($subaccount, $parameters);
+            $api->update($subaccount, ['status' => 'suspended']);
             $io->writeLine("<b>{$subaccount}</b> was succesfully suspended");
         } catch (APIResponseException $e) {
             $this->renderApiResponseException($e, $io);
@@ -125,13 +121,11 @@ final class SubaccountHandler extends AbstractSparkpostUnwrappedHandler
      */
     public function handleTerminate(Args $args, IO $io)
     {
-        $parameters = ['status' => 'terminated'];
-
         try {
             $subaccount = $args->getArgument('subaccount');
             $io->writeLine("Terminate subaccount: <b>{$subaccount}</b>");
             $api = $this->connect($args);
-            $api->update($subaccount, $parameters);
+            $api->update($subaccount, ['status' => 'terminated']);
             $io->writeLine("<b>{$subaccount}</b> was succesfully terminated");
         } catch (APIResponseException $e) {
             $this->renderApiResponseException($e, $io);
