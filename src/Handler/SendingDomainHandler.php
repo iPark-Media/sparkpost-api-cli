@@ -119,4 +119,34 @@ final class SendingDomainHandler extends AbstractSparkpostUnwrappedHandler
             $this->renderApiResponseException($e, $io);
         }
     }
+
+    /**
+     * Updates a Sending-Domain
+     * @param Args $args
+     * @param IO $io
+     */
+    public function handleVerify(Args $args, IO $io)
+    {
+        try {
+            $domain = $args->getArgument('domain');
+            $io->writeLine("Verifying: <b>{$domain}</b>");
+            $sparkpost = $this->connectRaw($args);
+            $api = $sparkpost->setupUnwrapped(static::API_ENDPOINT."/{$domain}/verify");
+            $response = $api->create(['dkim_verify' => true, 'spf_verify' => true]);
+            $io->writeLine("<b>{$domain}</b> was verified");
+            $result = $response['results'];
+            $table = new Table();
+            $table->setHeaderRow(['Domain', 'ownership', 'SPF', 'DKIM']);
+            $table->addRow([
+                $domain,
+                $result['ownership_verified'] ? '+' : '-',
+                $result['spf_status'] === 'valid' ? '+' : '-',
+                $result['dkim_status'] === 'valid' ? '+' : '-',
+            ]);
+
+            $table->render($io);
+        } catch (APIResponseException $e) {
+            $this->renderApiResponseException($e, $io);
+        }
+    }
 }
