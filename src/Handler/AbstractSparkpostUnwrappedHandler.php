@@ -37,6 +37,15 @@ class AbstractSparkpostUnwrappedHandler
      */
     protected function connect(Args $args)
     {
+        return $this->unwrap($this->connectRaw($args));
+    }
+
+    /**
+     * @param Args $args
+     * @return Sparkpost
+     */
+    protected function connectRaw(Args $args)
+    {
         $config = $args->getOption('config') ?? 'config.php';
 
         if (!file_exists($config)) {
@@ -47,12 +56,21 @@ class AbstractSparkpostUnwrappedHandler
 
         $httpAdapter = new Guzzle6HttpAdapter(new Client());
 
-        $parameters = [ 'key' => $args->getOption('key') ?? $this->config['key'] ];
+        $parameters = ['key' => $args->getOption('key') ?? $this->config['key']];
         $sparkpost = new Sparkpost($httpAdapter, $parameters);
         if ($args->isArgumentDefined('subaccount')) {
             $sparkpost->addSubaccount($args->getArgument('subaccount'));
+            return $sparkpost;
         }
+        return $sparkpost;
+    }
 
+    /**
+     * @param $sparkpost
+     * @return mixed
+     */
+    protected function unwrap($sparkpost)
+    {
         return $sparkpost->setupUnwrapped(static::API_ENDPOINT);
     }
 
