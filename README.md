@@ -163,6 +163,11 @@ Contributions to are very welcome!
 * You can grab the source code at the package’s [Git repository].
 * Please file pull requests against development branch
 
+
+Acknowledgement
+----------
+Uses the beautiful https://github.com/webmozart/console by @webmozart.
+
 License
 -------
 
